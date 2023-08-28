@@ -1,0 +1,23 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.list-of-locations {
+  list-style: none;
+}
+
+.list-of-locations li {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.list-of-locations li:hover{
+  background-color: grey;
+}
+
+input {
+  padding: 7px;
+}
