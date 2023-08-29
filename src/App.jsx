@@ -9,10 +9,17 @@ function App() {
   const [listOfLocations, setListOfLocations] = useState([]);
   const [showListOfLocations, setShowListOfLocations] = useState(true);
   const [actualLocation, setAcutualLocation] = useState('');
+  const [iptLocation, setIptLocation] = useState('');
 
   useEffect(() => {
-    console.log(weather)
-  }, [weather])
+    if (listOfLocations.length === 0) {
+      setNoSuchLocation(true);
+      setWeather(null);
+      return;
+    }
+
+    setShowListOfLocations(true);
+  }, [listOfLocations])
 
   // Called function when the user types something in the input
   const handleLocationSearch = async (e) => {
@@ -22,16 +29,13 @@ function App() {
     setNoSuchLocation(false);
     setListOfLocations(locations);
     setShowListOfLocations(true);
-
+    setIptLocation(value);
   }
+
+
 
   // Function that get the weather of a location with the first item in the array of locations
   const handleGetWeather = async () => {
-    if (listOfLocations.length === 0) {
-      setNoSuchLocation(true);
-      setWeather(null);
-      return;
-    }
     const today = await WeatherService.getWeatherByLocation(listOfLocations[0].name);
     setWeather(today);
     setShowListOfLocations(false);
@@ -55,29 +59,36 @@ function App() {
 
   return (
     <div className='main'>
-      <h2>Weather App</h2>
-      <input
-        placeholder='Busca tu ubicación'
-        onChange={handleLocationSearch}
-        onKeyDown={handlePressEnter} type="text"
-      />
+      <header>
+        <h2>Weather App</h2>
+        <section className="main-search">
+          <input
+            placeholder='Busca tu ubicación'
+            onChange={handleLocationSearch}
+            onKeyDown={handlePressEnter} type="text"
+          />
+          <button onClick={handleGetWeather}>Ver</button>
+        </section>
+      </header>
       {
-        listOfLocations.length > 0 && showListOfLocations && (
-          <ul className='list-of-locations'>
-            {
-              listOfLocations.map((location) => (
-                <li
-                  onClick={() => handleGetWeatherOfSelectedCountry(location.name, location.country)}
-                  key={location.id}
-                >
-                  {location.name} ({location.country})
-                </li>
-              ))
-            }
-          </ul>
+        listOfLocations.length > 0 &&
+        showListOfLocations && (
+          <section className='main-list'>
+            <ul className='main-list-locations'>
+              {
+                listOfLocations.map((loc) => (
+                  <li
+                    onClick={() => handleGetWeatherOfSelectedCountry(loc.name, loc.country)}
+                    key={loc.id}
+                  >
+                    {loc.name} ({loc.country})
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
         )
       }
-      <button onClick={handleGetWeather}>Ver el tiempo de hoy</button>
       {
         weather && (
           <>
@@ -91,7 +102,7 @@ function App() {
       }
       {
         noSuchLocation && (
-          <h3>No se ha encontrado ninguna ubicación</h3>
+          <h3>No hay coincidencias con "{iptLocation}"</h3>
         )
       }
     </div>

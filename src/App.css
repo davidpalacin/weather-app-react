@@ -1,23 +1,47 @@
 .main {
   display: flex;
+  align-items: center;
   flex-direction: column;
   gap: 13px;
 }
 
-.list-of-locations {
+header {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.main-list-locations {
   list-style: none;
 }
 
-.list-of-locations li {
+.main-list-locations li {
   cursor: pointer;
   padding: 10px;
   border-radius: 5px;
 }
 
-.list-of-locations li:hover{
+.main-list-locations li:hover {
   background-color: grey;
 }
 
-input {
-  padding: 7px;
+.main-search {
+  display: flex;
+  width: 100%;
+}
+
+.main-search input {
+  width: inherit;
+  border: none;
+  border-radius: 4px;
+  padding: 3px;
+}
+
+.main-search input:focus,
+.main-search input:focus-visible {
+  outline: none;
+}
+
+.main-list {
+  width: 100%;
 }
