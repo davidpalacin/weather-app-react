@@ -8,23 +8,23 @@ function App() {
   const [noSuchLocation, setNoSuchLocation] = useState(false);
   const [listOfLocations, setListOfLocations] = useState([]);
   const [showListOfLocations, setShowListOfLocations] = useState(true);
-  const [actualLocation, setAcutualLocation] = useState('');
   const [iptLocation, setIptLocation] = useState('');
 
   useEffect(() => {
     if (listOfLocations.length === 0) {
       setNoSuchLocation(true);
-      setWeather(null);
       return;
     }
-
     setShowListOfLocations(true);
   }, [listOfLocations])
 
   // Called function when the user types something in the input
   const handleLocationSearch = async (e) => {
     const value = e.target.value;
-    if (value.length === 0) return;
+    if (value.trim() === '') {
+      setNoSuchLocation(false);
+      return
+    }
     const locations = await WeatherService.getAutocompleteLocations(e.target.value);
     setNoSuchLocation(false);
     setListOfLocations(locations);
@@ -32,14 +32,11 @@ function App() {
     setIptLocation(value);
   }
 
-
-
   // Function that get the weather of a location with the first item in the array of locations
   const handleGetWeather = async () => {
     const today = await WeatherService.getWeatherByLocation(listOfLocations[0].name);
     setWeather(today);
     setShowListOfLocations(false);
-    setAcutualLocation(`${listOfLocations[0].name} (${listOfLocations[0].country})`);
   }
 
   const handlePressEnter = (e) => {
@@ -54,7 +51,6 @@ function App() {
     if (!today) return;
     setWeather(today);
     setShowListOfLocations(false);
-    setAcutualLocation(`${locationName} (${locationCountry})`)
   }
 
   return (
@@ -90,19 +86,27 @@ function App() {
         )
       }
       {
-        weather && (
-          <>
-            <h2>{actualLocation}</h2>
-            <img width={100} src={weather.current.condition.icon} alt="Icono que representa el clima de hoy" />
-            <h3>{weather.current.temp_c}ºC (Sensación térmica: {weather.current.feelslike_c}ºC)</h3>
-            <h3>{weather.current.condition.text}</h3>
-          </>
-
+        noSuchLocation && (
+          <span className='main-no-location'>No hay coincidencias con "{iptLocation}"</span>
         )
       }
       {
-        noSuchLocation && (
-          <h3>No hay coincidencias con "{iptLocation}"</h3>
+        weather && (
+          <>
+            <section className='main-weather'>
+              <section className="main-weather-info">
+                <h3>{weather.current.temp_c}ºC</h3>
+                <span>
+                  Sensación térmica: {weather.current.feelslike_c}º
+                </span>
+              </section>
+              <section className="main-weather-icon">
+                <img width={100} src={weather.current.condition.icon} alt="Icono que representa el clima de hoy" />
+                <h3>{weather.current.condition.text}</h3>
+              </section>
+            </section>
+          </>
+
         )
       }
     </div>

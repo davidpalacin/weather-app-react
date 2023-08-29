@@ -45,3 +45,35 @@ header {
 .main-list {
   width: 100%;
 }
+
+.main-no-location {
+  color: gray;
+  font-size: small;
+  display: flex;
+  width: 100%;
+}
+
+.main-weather {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 34px;
+}
+
+.main-weather-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.main-weather-info h3 {
+  font-size: 4rem;
+  font-weight: 400;
+}
+
+.main-weather-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
