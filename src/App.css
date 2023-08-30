@@ -59,6 +59,14 @@ header {
   margin-top: 34px;
 }
 
+.main-title {
+  margin-bottom: 10px;
+}
+
+.main-weatherTitle {
+  width: 100%;
+}
+
 .main-weather-info {
   display: flex;
   flex-direction: column;

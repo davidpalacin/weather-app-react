@@ -56,7 +56,7 @@ function App() {
   return (
     <div className='main'>
       <header>
-        <h2>Weather App</h2>
+        <h2 className='main-title'>Weather App</h2>
         <section className="main-search">
           <input
             placeholder='Busca tu ubicación'
@@ -93,6 +93,12 @@ function App() {
       {
         weather && (
           <>
+            <h3 className='main-weatherTitle'>El tiempo en {weather.location.name} ({weather.location.country})</h3>
+            <nav className="main-bar">
+              <section>Hoy</section>
+              <section>Mañana</section>
+              <section>Prox. 7 días</section>
+            </nav>
             <section className='main-weather'>
               <section className="main-weather-info">
                 <h3>{weather.current.temp_c}ºC</h3>
