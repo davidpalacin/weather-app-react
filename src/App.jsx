@@ -9,6 +9,7 @@ function App() {
   const [listOfLocations, setListOfLocations] = useState([]);
   const [showListOfLocations, setShowListOfLocations] = useState(true);
   const [iptLocation, setIptLocation] = useState('');
+  const [choosedDay, setChoosedDay] = useState('today');
 
   useEffect(() => {
     if (listOfLocations.length === 0) {
@@ -53,6 +54,10 @@ function App() {
     setShowListOfLocations(false);
   }
 
+  const handleSelectDay = (e) => {
+    setChoosedDay(e.target.value);
+  }
+
   return (
     <div className='main'>
       <header>
@@ -95,9 +100,9 @@ function App() {
           <>
             <h3 className='main-weatherTitle'>El tiempo en {weather.location.name} ({weather.location.country})</h3>
             <nav className="main-bar">
-              <section>Hoy</section>
-              <section>Mañana</section>
-              <section>Prox. 7 días</section>
+              <option onClick={handleSelectDay} value={'today'}>Hoy</option>
+              <option onClick={handleSelectDay} value={'tomorrow'}>Mañana</option>
+              <option onClick={handleSelectDay} value={'forecast'}>Prox. 7 días</option>
             </nav>
             <section className='main-weather'>
               <section className="main-weather-info">
