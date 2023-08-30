@@ -85,3 +85,39 @@ header {
   align-items: center;
   justify-content: center;
 }
+
+.main-bar {
+  display: flex;
+  width: 100%;
+  border: 2px solid whitesmoke;
+  border-radius: 15px;
+  justify-content: space-between;
+}
+
+.main-bar section {
+  text-decoration: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border: 1px solid grey;
+}
+
+.main-bar section:first-child,
+.main-bar section:last-child {
+  border: none;
+}
+
+.main-bar section:first-child {
+  border-radius: 15px 0 0 15px;
+}
+
+.main-bar section:last-child {
+  border-radius: 0 15px 15px 0;
+}
+
+.main-bar section:hover {
+  background-color: grey;
+}
