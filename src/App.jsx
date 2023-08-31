@@ -9,7 +9,7 @@ function App() {
   const [listOfLocations, setListOfLocations] = useState([]);
   const [showListOfLocations, setShowListOfLocations] = useState(true);
   const [iptLocation, setIptLocation] = useState('');
-  const [choosedDay, setChoosedDay] = useState('today');
+  const [selectedDay, setSelectedDay] = useState('today'); // ?
 
   useEffect(() => {
     if (listOfLocations.length === 0) {
@@ -26,17 +26,17 @@ function App() {
       setNoSuchLocation(false);
       return
     }
-    const locations = await WeatherService.getAutocompleteLocations(e.target.value);
+    const newLocations = await WeatherService.getAutocompleteLocations(e.target.value);
     setNoSuchLocation(false);
-    setListOfLocations(locations);
+    setListOfLocations(newLocations);
     setShowListOfLocations(true);
     setIptLocation(value);
   }
 
   // Function that get the weather of a location with the first item in the array of locations
   const handleGetWeather = async () => {
-    const today = await WeatherService.getWeatherByLocation(listOfLocations[0].name);
-    setWeather(today);
+    const newWeather = await WeatherService.getWeatherByLocation(listOfLocations[0].name);
+    setWeather(newWeather);
     setShowListOfLocations(false);
   }
 
@@ -48,14 +48,15 @@ function App() {
 
   // Get the weather of a location of an exact country
   const handleGetWeatherOfSelectedCountry = async (locationName, locationCountry) => {
-    const today = await WeatherService.getWeatherByLocation(`${locationName} ${locationCountry}`);
-    if (!today) return;
-    setWeather(today);
+    const newWeather = await WeatherService.getWeatherByLocation(`${locationName} ${locationCountry}`);
+    if (!newWeather) return;
+    setWeather(newWeather);
     setShowListOfLocations(false);
   }
 
   const handleSelectDay = (e) => {
-    setChoosedDay(e.target.value);
+    const newSelectedDay = e.target.value;
+    setSelectedDay(newSelectedDay); // ?
   }
 
   return (
