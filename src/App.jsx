@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { WeatherService } from './services/weatherService';
-import.meta.env.WEATHER_API;
+import { Weather } from './components/Weather';
+import { LocationsList } from './components/LocationsList';
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -34,8 +35,8 @@ function App() {
   }
 
   // Function that get the weather of a location with the first item in the array of locations
-  const handleGetWeather = async () => {
-    const newWeather = await WeatherService.getWeatherByLocation(listOfLocations[0].name);
+  const handleGetWeather = async (weatherWithCountry) => {
+    const newWeather = await WeatherService.getWeatherByLocation(weatherWithCountry ?? listOfLocations[0].name);
     setWeather(newWeather);
     setShowListOfLocations(false);
   }
@@ -44,14 +45,6 @@ function App() {
     if (e.key === 'Enter') {
       handleGetWeather();
     }
-  }
-
-  // Get the weather of a location of an exact country
-  const handleGetWeatherOfSelectedCountry = async (locationName, locationCountry) => {
-    const newWeather = await WeatherService.getWeatherByLocation(`${locationName} ${locationCountry}`);
-    if (!newWeather) return;
-    setWeather(newWeather);
-    setShowListOfLocations(false);
   }
 
   const handleSelectDay = (e) => {
@@ -75,20 +68,7 @@ function App() {
       {
         listOfLocations.length > 0 &&
         showListOfLocations && (
-          <section className='main-list'>
-            <ul className='main-list-locations'>
-              {
-                listOfLocations.map((loc) => (
-                  <li
-                    onClick={() => handleGetWeatherOfSelectedCountry(loc.name, loc.country)}
-                    key={loc.id}
-                  >
-                    {loc.name} ({loc.country})
-                  </li>
-                ))
-              }
-            </ul>
-          </section>
+          <LocationsList listOfLocations={listOfLocations} handleGetWeather={handleGetWeather} />
         )
       }
       {
@@ -98,27 +78,7 @@ function App() {
       }
       {
         weather && (
-          <>
-            <h3 className='main-weatherTitle'>El tiempo en {weather.location.name} ({weather.location.country})</h3>
-            <nav className="main-bar">
-              <option onClick={handleSelectDay} value={'today'}>Hoy</option>
-              <option onClick={handleSelectDay} value={'tomorrow'}>Mañana</option>
-              <option onClick={handleSelectDay} value={'forecast'}>Prox. 7 días</option>
-            </nav>
-            <section className='main-weather'>
-              <section className="main-weather-info">
-                <h3>{weather.current.temp_c}ºC</h3>
-                <span>
-                  Sensación térmica: {weather.current.feelslike_c}º
-                </span>
-              </section>
-              <section className="main-weather-icon">
-                <img width={100} src={weather.current.condition.icon} alt="Icono que representa el clima de hoy" />
-                <h3>{weather.current.condition.text}</h3>
-              </section>
-            </section>
-          </>
-
+          <Weather weather={weather} handleSelectDay={handleSelectDay} />
         )
       }
     </div>
