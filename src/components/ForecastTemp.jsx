@@ -1,9 +1,6 @@
 import { useEffect } from "react"
 
 export const ForecastTemp = ({ forecast }) => {
-  useEffect(() => {
-    console.log(forecast)
-  }, [forecast])
   return (
     <>
       <section className="forecast-temp-container">

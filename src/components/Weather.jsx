@@ -3,10 +3,6 @@ import { CurrentTemp } from './CurrentTemp'
 import { ForecastTemp } from './ForecastTemp'
 
 export const Weather = ({ weather, handleSelectDay, actualLocation, forecast, selectedDay }) => {
-  useEffect(() => {
-    console.log(forecast)
-  }, [forecast])
-
   const [date, setDate] = useState(forecast.date);
 
   useEffect(() => {

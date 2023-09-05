@@ -42,7 +42,6 @@ function App() {
       // Save the forecast of tomorrow to show the max temp and min temp forecast.
       WeatherService.getWeatherByLocationAndDay(actualLocation, '2')
         .then(newWeather => {
-          console.log(newWeather)
           // We set the new weather
           setWeather(newWeather);
           setForecast(newWeather.forecast.forecastday[1]);
