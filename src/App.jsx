@@ -3,6 +3,7 @@ import './App.css'
 import { WeatherService } from './services/weatherService';
 import { Weather } from './components/Weather';
 import { LocationsList } from './components/LocationsList';
+import { DAYS } from '../types.js'
 
 function App() {
   const [weather, setWeather] = useState(null);
@@ -10,7 +11,9 @@ function App() {
   const [listOfLocations, setListOfLocations] = useState([]);
   const [showListOfLocations, setShowListOfLocations] = useState(true);
   const [iptLocation, setIptLocation] = useState('');
-  const [selectedDay, setSelectedDay] = useState('today'); // ?
+  const [selectedDay, setSelectedDay] = useState('today'); // The select day by the user to show the weather
+  const [actualLocation, setActualLocation] = useState(''); // We save the actual selected location for swapping the days without losing it
+  const [forecast, setForecast] = useState({});
 
   useEffect(() => {
     if (listOfLocations.length === 0) {
@@ -20,7 +23,37 @@ function App() {
     setShowListOfLocations(true);
   }, [listOfLocations])
 
-  // Called function when the user types something in the input
+  useEffect(() => {
+    // Need weather variable with content to can change the day, if not we get out of the function.
+    if (!weather) return;
+    if (selectedDay === DAYS.TODAY) {
+      // Use the API to get today's weather
+      WeatherService.getWeatherByLocation(actualLocation)
+        .then(newWeather => {
+          // We set the new weather
+          setWeather(newWeather);
+          setForecast(newWeather.forecast.forecastday[0]);
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+    if (selectedDay === DAYS.TOMORROW) {
+      // Save the forecast of tomorrow to show the max temp and min temp forecast.
+      WeatherService.getWeatherByLocationAndDay(actualLocation, '2')
+        .then(newWeather => {
+          console.log(newWeather)
+          // We set the new weather
+          setWeather(newWeather);
+          setForecast(newWeather.forecast.forecastday[1]);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  }, [selectedDay])
+
+  // Use the API to get a list of locations that matches with the user input
   const handleLocationSearch = async (e) => {
     const value = e.target.value;
     if (value.trim() === '') {
@@ -34,12 +67,19 @@ function App() {
     setIptLocation(value);
   }
 
-  // Function that get the weather of a location with the first item in the array of locations
+  // Function that set the weather data
   const handleGetWeather = async (weatherWithCountry) => {
-    const newWeather = await WeatherService.getWeatherByLocation(weatherWithCountry ?? listOfLocations[0].name);
+    // If we get the country use it, if not, get the weather of the first location
+    const newWeather = await WeatherService.getWeatherByLocation(
+      weatherWithCountry ??
+      `${listOfLocations[0].name} (${listOfLocations[0].country})`
+    );
     setWeather(newWeather);
+    setForecast(newWeather.forecast.forecastday[0]);
     setShowListOfLocations(false);
+    setActualLocation(weatherWithCountry ?? `${listOfLocations[0].name} (${listOfLocations[0].country})`);
   }
+
 
   const handlePressEnter = (e) => {
     if (e.key === 'Enter') {
@@ -49,7 +89,7 @@ function App() {
 
   const handleSelectDay = (e) => {
     const newSelectedDay = e.target.value;
-    setSelectedDay(newSelectedDay); // ?
+    setSelectedDay(newSelectedDay);
   }
 
   return (
@@ -78,7 +118,7 @@ function App() {
       }
       {
         weather && (
-          <Weather weather={weather} handleSelectDay={handleSelectDay} />
+          <Weather forecast={forecast} weather={weather} handleSelectDay={handleSelectDay} actualLocation={actualLocation} selectedDay={selectedDay} />
         )
       }
     </div>

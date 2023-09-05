@@ -5,7 +5,7 @@ export const LocationsList = ({ listOfLocations, handleGetWeather }) => {
         {
           listOfLocations.map((loc) => (
             <li
-              onClick={() => handleGetWeather(loc.name + ' ' + loc.country)}
+              onClick={() => handleGetWeather(loc.name + ' (' + loc.country + ')')}
               key={loc.id}
             >
               {loc.name} ({loc.country})
