@@ -16,14 +16,6 @@ function App() {
   const [forecast, setForecast] = useState({});
 
   useEffect(() => {
-    if (listOfLocations.length === 0) {
-      setNoSuchLocation(true);
-      return;
-    }
-    setShowListOfLocations(true);
-  }, [listOfLocations]);
-
-  useEffect(() => {
     // Look for user's location on load page
     if ('geolocation' in navigator) {
       // geolocation is avaliable
@@ -79,9 +71,14 @@ function App() {
       return
     }
     const newLocations = await WeatherService.getAutocompleteLocations(e.target.value);
-    setNoSuchLocation(false);
-    setListOfLocations(newLocations);
-    setShowListOfLocations(true);
+    if (newLocations.length === 0) {
+      setNoSuchLocation(true);
+      setShowListOfLocations(false);
+    } else {
+      setNoSuchLocation(false);
+      setListOfLocations(newLocations);
+      setShowListOfLocations(true);
+    }
     setIptLocation(value);
   }
 
