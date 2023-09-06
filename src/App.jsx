@@ -21,7 +21,26 @@ function App() {
       return;
     }
     setShowListOfLocations(true);
-  }, [listOfLocations])
+  }, [listOfLocations]);
+
+  useEffect(() => {
+    // Look for user's location on load page
+    if ('geolocation' in navigator) {
+      // geolocation is avaliable
+      navigator.geolocation.getCurrentPosition(async position => {
+        const userCoords = {
+          lat: position.coords.latitude,
+          lon: position.coords.longitude
+        }
+        // save the location name of the user
+        const userLoc = await WeatherService.getAutocompleteLocations(`${userCoords.lat}, ${userCoords.lon}`);
+        const newWeather = await WeatherService.getWeatherByLocation(`${userCoords.lat},${userCoords.lon}`);
+        setActualLocation(`${userLoc[0].name} (${userLoc[0].country})`);
+        setWeather(newWeather);
+        setForecast(newWeather.forecast.forecastday[0]);
+      });
+    }
+  }, [])
 
   useEffect(() => {
     // Need weather variable with content to can change the day, if not we get out of the function.
